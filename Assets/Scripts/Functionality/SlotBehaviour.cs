@@ -310,14 +310,14 @@ public class SlotBehaviour : MonoBehaviour
         for(int i = 0; i<values.Count; i++)
         {
             GameObject myImg = Instantiate(Image_Prefab, Slot_Transform[number]);
-            images[number].slotImages.Add(myImg.transform.GetChild(1).GetComponent<Image>());
+            images[number].slotImages.Add(myImg.transform.GetChild(0).GetComponent<Image>());
             images[number].slotImages[i].sprite = myImages[values[i]];
             PopulateAnimationSprites(images[number].slotImages[i].GetComponent<ImageAnimation>(), values[i]);
         }
         for (int k = 0; k < 2; k++)
         {
             GameObject mylastImg = Instantiate(Image_Prefab, Slot_Transform[number]);
-            images[number].slotImages.Add(mylastImg.transform.GetChild(1).GetComponent<Image>());
+            images[number].slotImages.Add(mylastImg.transform.GetChild(0).GetComponent<Image>());
             images[number].slotImages[images[number].slotImages.Count - 1].sprite = myImages[values[k]];
             PopulateAnimationSprites(images[number].slotImages[images[number].slotImages.Count - 1].GetComponent<ImageAnimation>(), values[k]);
         }
