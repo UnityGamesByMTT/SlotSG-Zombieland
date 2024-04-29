@@ -1,1 +1,1 @@
-# Slot-Zombieland
+# Slot-Egyptian-Treasures
