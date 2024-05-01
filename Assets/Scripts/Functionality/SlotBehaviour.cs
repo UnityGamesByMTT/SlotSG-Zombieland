@@ -144,6 +144,7 @@ public class SlotBehaviour : MonoBehaviour
     bool IsAutoSpin = false;
     bool IsSpinning = false;
     bool SlotRunning = false;
+    [SerializeField] private int spacefactor;
     //Coroutine AutoSpinRoutine = null;
 
     private void Start()
@@ -662,8 +663,8 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator StopTweening(int reqpos, Transform slotTransform, int index)
     {
         alltweens[index].Pause();
-        int tweenpos = (reqpos * IconSizeFactor) - IconSizeFactor;
-        alltweens[index] = slotTransform.DOLocalMoveY(-tweenpos + 100-44, 0.5f).SetEase(Ease.OutElastic);
+        int tweenpos = (reqpos * (IconSizeFactor+spacefactor)) - IconSizeFactor+(2*spacefactor);
+        alltweens[index] = slotTransform.DOLocalMoveY(-tweenpos+100+(4* spacefactor), 0.5f).SetEase(Ease.OutElastic);
         yield return new WaitForSeconds(0.2f);
     }
 
