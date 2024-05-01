@@ -45752,7 +45752,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 44b466fd6fc3a44a78562905e3dcf295, type: 3}
   - {fileID: 21300000, guid: b6c102642649140e3b17e78efaf7cb82, type: 3}
   audioController: {fileID: 4327319551677706936}
-  spacefactor: 20
+  SpaceFactor: 20
   TempLineIds: 0400000002000000
   x_animationString:
   - 0,1,2
