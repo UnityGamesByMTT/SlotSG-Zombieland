@@ -313,7 +313,7 @@ public class SlotBehaviour : MonoBehaviour
     {
         if (audioController) audioController.PlayButtonAudio();
 
-        if (TotalBet_text) TotalBet_text.text = "99999";
+        //if (TotalBet_text) TotalBet_text.text = "99999";
     }
 
     private void ToggleLine()
