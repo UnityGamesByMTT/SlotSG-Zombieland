@@ -38,6 +38,7 @@ public class ImageAnimation : MonoBehaviour
 
 	[SerializeField]
 	private Sprite OriginalSprite;
+
 	private void Awake()
 	{
 		if (Instance == null)
@@ -115,15 +116,13 @@ public class ImageAnimation : MonoBehaviour
 
 	public void StopAnimation()
 	{
-		if (currentAnimationState != 0)
-		{
-			if (OriginalSprite != null)
-				rendererDelegate.sprite = OriginalSprite;
-			else
+
+			if (currentAnimationState != 0)
+			{
 				rendererDelegate.sprite = textureArray[0];
-			CancelInvoke("AnimationProcess");
-			currentAnimationState = ImageState.NONE;
-		}
+				CancelInvoke("AnimationProcess");
+				currentAnimationState = ImageState.NONE;
+			}
 	}
 
 	public void RevertToInitialState()

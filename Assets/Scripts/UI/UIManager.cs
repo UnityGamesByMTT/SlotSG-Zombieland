@@ -62,6 +62,19 @@ public class UIManager : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioController audioController;
 
+    [Header("Free Spin")]
+    [SerializeField] private GameObject freeSpin;
+    [SerializeField] private TMP_Text freeSpin_text;
+    private int FreeSpins;
+
+    [SerializeField]
+    private Button GameExit_Button;
+
+    [SerializeField]
+    private SlotBehaviour slotManager;
+
+    [SerializeField]
+    private TMP_Text[] SymbolsText;
 
     private void Start()
     {
@@ -122,24 +135,70 @@ public class UIManager : MonoBehaviour
         if (AddCoinExit_button) AddCoinExit_button.onClick.AddListener(delegate { ClosePopup(AddCoin_panel); });
 
         if (AddCoin_back_button) AddCoin_back_button.onClick.RemoveAllListeners();
-        if (AddCoin_back_button) AddCoin_back_button.onClick.AddListener(delegate { ClosePopup(AddCoin_panel); });        
-
-        if (Gamble_button) Gamble_button.onClick.RemoveAllListeners();
-        if (Gamble_button) Gamble_button.onClick.AddListener(delegate { OpenPopup(Gamble_game); });
-
-        if (GambleExit_button) GambleExit_button.onClick.RemoveAllListeners();
-        if (GambleExit_button) GambleExit_button.onClick.AddListener(delegate { ClosePopup(Gamble_game); });
+        if (AddCoin_back_button) AddCoin_back_button.onClick.AddListener(delegate { ClosePopup(AddCoin_panel); });
 
 
-
-        //if (SoundButton) SoundButton.onClick.RemoveAllListeners();
-        //if (SoundButton) SoundButton.onClick.AddListener(ToggleSound);
-
-
-
+        if (GameExit_Button) GameExit_Button.onClick.RemoveAllListeners();
+        if (GameExit_Button) GameExit_Button.onClick.AddListener(CallOnExitFunction);
 
     }
 
+    private void CallOnExitFunction()
+    {
+        slotManager.CallCloseSocket();
+        Application.ExternalCall("window.parent.postMessage", "onExit", "*");
+    }
+
+    internal void InitialiseUIData(string SupportUrl, string AbtImgUrl, string TermsUrl, string PrivacyUrl, Paylines symbolsText)
+    {
+        PopulateSymbolsPayout(symbolsText);
+    }
+
+    private void PopulateSymbolsPayout(Paylines paylines)
+    {
+            print("payline :"+paylines.symbols.Count);
+        for (int i = 0; i < paylines.symbols.Count; i++)
+        {
+            print(i);
+            if (i < SymbolsText.Length)
+            {
+                string text = null;
+                if (paylines.symbols[i].multiplier._5x != 0)
+                {
+                    text += "<color=yellow>5x</color> - " + paylines.symbols[i].multiplier._5x;
+                }
+                if (paylines.symbols[i].multiplier._4x != 0)
+                {
+                    text += "\n<color=yellow>4x</color> - " + paylines.symbols[i].multiplier._4x;
+                }
+                if (paylines.symbols[i].multiplier._3x != 0)
+                {
+                    text += "\n<color=yellow>3x</color> - " + paylines.symbols[i].multiplier._3x;
+                }
+                if (paylines.symbols[i].multiplier._2x != 0)
+                {
+                    text += "\n<color=yellow>2x</color> - " + paylines.symbols[i].multiplier._2x;
+                }
+                if (SymbolsText[i]) SymbolsText[i].text = text;
+            }
+        }
+    }
+
+
+    internal void ShowFreeSpinData(int spins)
+    {
+        FreeSpins = spins;
+        if (freeSpin) freeSpin.SetActive(true);
+        if (freeSpin_text) freeSpin_text.text += "\n" + spins.ToString();
+        if (MainPopup_Object) MainPopup_Object.SetActive(true);
+        DOVirtual.DelayedCall(1f, () =>
+        {
+            if (freeSpin) freeSpin.SetActive(false);
+            if (MainPopup_Object) MainPopup_Object.SetActive(false);
+            if (freeSpin_text) freeSpin_text.text += "0";
+
+        });
+    }
 
     private void OpenPopup(GameObject Popup)
     {
@@ -198,18 +257,21 @@ public class UIManager : MonoBehaviour
         paginationButtonGrp[paginationCounter - 1].transform.GetChild(0).gameObject.SetActive(true);
     }
 
-    private void ChangeSound() {
-     audioController.ChangeVolume("wl", Sound_slider.value);
-     audioController.ChangeVolume("button", Sound_slider.value);
+    private void ChangeSound()
+    {
+        audioController.ChangeVolume("wl", Sound_slider.value);
+        audioController.ChangeVolume("button", Sound_slider.value);
 
     }
 
-    private void ChangeMusic() {
-     audioController.ChangeVolume("bg", Music_slider.value);
+    private void ChangeMusic()
+    {
+        audioController.ChangeVolume("bg", Music_slider.value);
 
     }
 
-    private void ToggleNotification() {
+    private void ToggleNotification()
+    {
         isNotifyOff = !isNotifyOff;
 
         Notification_on.SetActive(isNotifyOff);

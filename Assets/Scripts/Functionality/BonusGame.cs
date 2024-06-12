@@ -2,93 +2,192 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using DG.Tweening;
+
 
 public class BonusGame : MonoBehaviour
 {
 
-    [SerializeField] private Button btn1;
-    [SerializeField] private Button btn2;
-    [SerializeField] private Button btn3;
-    [SerializeField] private Button btn4;
-    [SerializeField] private Button btn5;
+    [SerializeField] private Button[] btn;
+    //[SerializeField] private Button btn2;
+    //[SerializeField] private Button btn3;
+    //[SerializeField] private Button btn4;
+    //[SerializeField] private Button btn5;
 
     [SerializeField] private ImageAnimation[] imagelist;
-
-    [SerializeField] private Sprite[] Symbol1;
+    [SerializeField] private TMP_Text[] textList;
+    [SerializeField] private Sprite[] GameOver;
     [SerializeField] private Sprite[] Symbol2;
     [SerializeField] private Sprite[] Symbol3;
     [SerializeField] private Sprite[] Symbol4;
     [SerializeField] private Sprite[] Symbol5;
 
-    [SerializeField] private int[] result;
+    [SerializeField] private List<int> result = new List<int>();
+    [SerializeField] private List<Button> tempButtonList = new List<Button>();
+    int counter = 0;
+    [SerializeField] private GameObject bonusGame;
+    [SerializeField] private SlotBehaviour slotBehaviour;
+    List<int> randomIndex = new List<int>();
+
 
     void Start()
     {
+
+        if (btn[0]) btn[0].onClick.RemoveAllListeners();
+        if (btn[0]) btn[0].onClick.AddListener(delegate { OnSelectGrave(btn[0], imagelist[0], textList[0]); });
+
+        if (btn[1]) btn[1].onClick.RemoveAllListeners();
+        if (btn[1]) btn[1].onClick.AddListener(delegate { OnSelectGrave(btn[1], imagelist[1], textList[1]); });
+
+        if (btn[2]) btn[2].onClick.RemoveAllListeners();
+        if (btn[2]) btn[2].onClick.AddListener(delegate { OnSelectGrave(btn[2], imagelist[2], textList[2]); });
+
+        if (btn[3]) btn[3].onClick.RemoveAllListeners();
+        if (btn[3]) btn[3].onClick.AddListener(delegate { OnSelectGrave(btn[3], imagelist[3], textList[3]); });
+
+        if (btn[4]) btn[4].onClick.RemoveAllListeners();
+        if (btn[4]) btn[4].onClick.AddListener(delegate { OnSelectGrave(btn[4], imagelist[4], textList[4]); });
+
+
+    }
+
+    internal void startgame(List<int> bonusResult)
+    {
+
+        //result = bonusResult;
         Initialize();
-        if (btn1) btn1.onClick.RemoveAllListeners();
-        if (btn1) btn1.onClick.AddListener(delegate { OnSelectGrave(btn1,imagelist[0]); });
 
-        if (btn2) btn2.onClick.RemoveAllListeners();
-        if (btn2) btn2.onClick.AddListener(delegate { OnSelectGrave(btn2,imagelist[1]); });
+        foreach (int item in bonusResult)
+        {
+            if (item == -1)
+                continue;
+            else
+                result.Add(item);
+        }
+        result.Add(-1);
 
-        if (btn3) btn3.onClick.RemoveAllListeners();
-        if (btn3) btn3.onClick.AddListener(delegate { OnSelectGrave(btn3,imagelist[2]); });
+        bonusGame.SetActive(true);
+    }
 
-        if (btn4) btn4.onClick.RemoveAllListeners();
-        if (btn4) btn4.onClick.AddListener(delegate { OnSelectGrave(btn4,imagelist[3]); });
+    internal void resetgame()
+    {
 
-        if (btn5) btn5.onClick.RemoveAllListeners();
-        if (btn5) btn5.onClick.AddListener(delegate { OnSelectGrave(btn5,imagelist[4]); });
-
-
+        bonusGame.SetActive(false);
+        slotBehaviour.CheckPopups = false;
     }
 
     private void Initialize()
     {
-        for (int i = 0; i < result.Length; i++)
+        tempButtonList.Clear();
+        randomIndex.Clear();
+        counter = 0;
+        result.Clear();
+
+        foreach (var item in imagelist)
         {
-            //ImageAnimation img = imagelist[i].GetComponent<ImageAnimation>();
-            PopulateAnimationSprites(imagelist[i], result[i]);
+            item.textureArray.Clear();
+        }
+
+        foreach (var item in btn)
+        {
+            item.interactable = true;
+        }
+
+
+        foreach (var item in textList)
+        {
+            item.transform.localPosition = Vector2.zero;
+        }
+
+
+        for (int i = 0; i < 4; i++)
+        {
+            randomIndex.Add(i);
+        }
+
+        foreach (var item in btn)
+        {
+            tempButtonList.Add(item);
         }
     }
 
-    void OnSelectGrave(Button btn,ImageAnimation img) {
+    void OnSelectGrave(Button btn, ImageAnimation img, TMP_Text text)
+    {
 
         btn.interactable = false;
-        img.StartAnimation();
+        tempButtonList.Remove(btn);
+        if (counter >= (result.Count - 1))
+        {
 
+            foreach (var item in tempButtonList)
+            {
+                item.interactable = false;
+            }
+        }
+        int index = Random.Range(0, randomIndex.Count);
+        if (counter >= (result.Count - 1))
+        {
+
+            PopulateAnimationSprites(img, -1);
+            text.text = "GAME OVER";
+            text.gameObject.SetActive(true);
+            text.transform.DOLocalMoveY(140, 1f).onComplete = () =>
+            {
+                text.gameObject.SetActive(false);
+            };
+
+            img.StartAnimation();
+            Invoke("resetgame", 2f);
+            return;
+        }
+
+        PopulateAnimationSprites(img, randomIndex[index]);
+        text.text = "+" + result[counter].ToString("0.00");
+        randomIndex.Remove(index);
+
+
+        text.gameObject.SetActive(true);
+        text.transform.DOLocalMoveY(140, 1f).onComplete = () =>
+        {
+
+            text.gameObject.SetActive(false);
+
+        };
+
+        img.StartAnimation();
+        counter++;
     }
 
     private void PopulateAnimationSprites(ImageAnimation animScript, int val)
     {
-        print(val);
         switch (val)
         {
-            case 0:
-                for (int i = 0; i < Symbol1.Length; i++)
+            case -1:
+                for (int i = 0; i < GameOver.Length; i++)
                 {
-                    animScript.textureArray.Add(Symbol1[i]);
+                    animScript.textureArray.Add(GameOver[i]);
                 }
                 break;
-            case 1:
+            case 0:
                 for (int i = 0; i < Symbol2.Length; i++)
                 {
                     animScript.textureArray.Add(Symbol2[i]);
                 }
                 break;
-            case 2:
+            case 1:
                 for (int i = 0; i < Symbol3.Length; i++)
                 {
                     animScript.textureArray.Add(Symbol3[i]);
                 }
                 break;
-            case 3:
+            case 2:
                 for (int i = 0; i < Symbol4.Length; i++)
                 {
                     animScript.textureArray.Add(Symbol4[i]);
                 }
                 break;
-            case 4:
+            case 3:
                 for (int i = 0; i < Symbol5.Length; i++)
                 {
                     animScript.textureArray.Add(Symbol5[i]);
