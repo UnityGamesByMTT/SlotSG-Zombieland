@@ -274,7 +274,7 @@ public class SocketIOManager : MonoBehaviour
         //message.Data = new GambleData();
 
         message.collect = false;
-        message.id = "Gamble";
+        message.id = "GAMBLE";
         string json = JsonUtility.ToJson(message);
         Debug.Log(json);
         if (this.manager.Socket != null && this.manager.Socket.IsOpen)
@@ -296,7 +296,7 @@ public class SocketIOManager : MonoBehaviour
         GambleData message = new GambleData();
 
         message.collect = true;
-        message.id = "Gamble";
+        message.id = "GAMBLE";
         string json = JsonUtility.ToJson(message);
         Debug.Log(json);
         if (this.manager.Socket != null && this.manager.Socket.IsOpen)
