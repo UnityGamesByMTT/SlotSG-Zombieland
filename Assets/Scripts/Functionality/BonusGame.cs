@@ -22,18 +22,19 @@ public class BonusGame : MonoBehaviour
     [SerializeField] private Sprite[] Symbol3;
     [SerializeField] private Sprite[] Symbol4;
     [SerializeField] private Sprite[] Symbol5;
+    [SerializeField] private GameObject RayCast_Panel;
 
     [SerializeField] private List<int> result = new List<int>();
     [SerializeField] private List<Button> tempButtonList = new List<Button>();
     int counter = 0;
     [SerializeField] private GameObject bonusGame;
     [SerializeField] private SlotBehaviour slotBehaviour;
+    [SerializeField] private AudioController audioManager;
     List<int> randomIndex = new List<int>();
 
 
     void Start()
     {
-
         if (btn[0]) btn[0].onClick.RemoveAllListeners();
         if (btn[0]) btn[0].onClick.AddListener(delegate { OnSelectGrave(btn[0], imagelist[0], textList[0]); });
 
@@ -48,31 +49,21 @@ public class BonusGame : MonoBehaviour
 
         if (btn[4]) btn[4].onClick.RemoveAllListeners();
         if (btn[4]) btn[4].onClick.AddListener(delegate { OnSelectGrave(btn[4], imagelist[4], textList[4]); });
-
-
     }
 
     internal void startgame(List<int> bonusResult)
     {
-
-        //result = bonusResult;
+        if (audioManager) audioManager.SwitchBGSound(true);
+        if (RayCast_Panel) RayCast_Panel.SetActive(false);
+        result = bonusResult;
         Initialize();
-
-        foreach (int item in bonusResult)
-        {
-            if (item == -1)
-                continue;
-            else
-                result.Add(item);
-        }
-        result.Add(-1);
 
         bonusGame.SetActive(true);
     }
 
     internal void resetgame()
     {
-
+        if (audioManager) audioManager.SwitchBGSound(false);
         bonusGame.SetActive(false);
         slotBehaviour.CheckPopups = false;
     }
@@ -114,7 +105,7 @@ public class BonusGame : MonoBehaviour
 
     void OnSelectGrave(Button btn, ImageAnimation img, TMP_Text text)
     {
-
+        if (RayCast_Panel) RayCast_Panel.SetActive(true);
         btn.interactable = false;
         tempButtonList.Remove(btn);
         if (counter >= (result.Count - 1))
@@ -128,7 +119,7 @@ public class BonusGame : MonoBehaviour
         int index = Random.Range(0, randomIndex.Count);
         if (counter >= (result.Count - 1))
         {
-
+            if (audioManager) audioManager.PlayBonusAudio("lose");
             PopulateAnimationSprites(img, -1);
             text.text = "GAME OVER";
             text.gameObject.SetActive(true);
@@ -141,6 +132,7 @@ public class BonusGame : MonoBehaviour
             Invoke("resetgame", 2f);
             return;
         }
+        if (audioManager) audioManager.PlayBonusAudio("win");
 
         PopulateAnimationSprites(img, randomIndex[index]);
         text.text = "+" + result[counter].ToString("0.00");
@@ -157,6 +149,7 @@ public class BonusGame : MonoBehaviour
 
         img.StartAnimation();
         counter++;
+        if (RayCast_Panel) RayCast_Panel.SetActive(false);
     }
 
     private void PopulateAnimationSprites(ImageAnimation animScript, int val)
