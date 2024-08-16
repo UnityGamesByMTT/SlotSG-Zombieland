@@ -118,6 +118,9 @@ public class UIManager : MonoBehaviour
     private Button GameExit_Button;
 
     [SerializeField]
+    private Button GameExitSplash_Button;
+
+    [SerializeField]
     private SlotBehaviour slotManager;
 
     [SerializeField]
@@ -224,6 +227,9 @@ public class UIManager : MonoBehaviour
 
         if (GameExit_Button) GameExit_Button.onClick.RemoveAllListeners();
         if (GameExit_Button) GameExit_Button.onClick.AddListener(delegate { OpenPopup(QuitPopup_Object); });
+
+        if (GameExitSplash_Button) GameExitSplash_Button.onClick.RemoveAllListeners();
+        if (GameExitSplash_Button) GameExitSplash_Button.onClick.AddListener(delegate { OpenPopup(QuitPopup_Object); });
 
         if (NoQuit_Button) NoQuit_Button.onClick.RemoveAllListeners();
         if (NoQuit_Button) NoQuit_Button.onClick.AddListener(delegate { ClosePopup(QuitPopup_Object); });

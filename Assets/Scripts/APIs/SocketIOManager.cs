@@ -340,11 +340,13 @@ public class SocketIOManager : MonoBehaviour
 
     private void PopulateSlotSocket(List<string> slotPop, List<string> LineIds)
     {
-        for (int i = 0; i < slotPop.Count; i++)
-        {
-            List<int> points = slotPop[i]?.Split(',')?.Select(Int32.Parse)?.ToList();
-            slotManager.PopulateInitalSlots(i, points);
-        }
+        slotManager.shuffleInitialMatrix();
+
+        //for (int i = 0; i < slotPop.Count; i++)
+        //{
+        //    List<int> points = slotPop[i]?.Split(',')?.Select(Int32.Parse)?.ToList();
+        //    slotManager.PopulateInitalSlots(i, points);
+        //}
 
         for (int i = 0; i < slotPop.Count; i++)
         {
