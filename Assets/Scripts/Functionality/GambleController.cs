@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
+
 public class GambleController : MonoBehaviour
 {
     [SerializeField]
@@ -45,6 +47,8 @@ public class GambleController : MonoBehaviour
     internal bool gambleStart = false;
     internal bool isResult = false;
 
+    private Tweener Gamble_Tween_Scale = null;
+
     private void Start()
     {
         if (doubleButton) doubleButton.onClick.RemoveAllListeners();
@@ -59,6 +63,7 @@ public class GambleController : MonoBehaviour
 
     void StartGamblegame()
     {
+        GambleTweeningAnim(false);
         winamount.text = "0";
         if (audioController) audioController.PlayButtonAudio();
         if (gamble_game) gamble_game.SetActive(true);
@@ -284,6 +289,22 @@ public class GambleController : MonoBehaviour
     void OnGameOver()
     {
         StartCoroutine(Collectroutine());
+    }
+
+    internal void GambleTweeningAnim(bool IsStart)
+    {
+        if (IsStart)
+        {
+            //m_Temp_GambleButton = doubleButton.gameObject.transform.position;
+            Gamble_Tween_Scale = doubleButton.gameObject.GetComponent<RectTransform>().DOScale(new Vector2(1.18f, 1.18f), 1f).SetLoops(-1, LoopType.Yoyo).SetDelay(0);
+            //Gamble_Tween_Move = doubleButton.gameObject.GetComponent<RectTransform>().DOMoveY(doubleButton.transform.position.y + .1f, 1f).SetLoops(-1, LoopType.Yoyo).SetDelay(0);
+        }
+        else
+        {
+            Gamble_Tween_Scale.Kill();
+            //Gamble_Tween_Move.Kill();
+            doubleButton.gameObject.GetComponent<RectTransform>().localScale = Vector3.one;
+        }
     }
 
     IEnumerator loadingRoutine()
