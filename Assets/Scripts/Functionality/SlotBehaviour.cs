@@ -126,6 +126,15 @@ public class SlotBehaviour : MonoBehaviour
     [SerializeField]
     private BonusGame _bonusManager;
 
+    [SerializeField]
+    private Button m_Gamble_Button;
+
+    [Header("Free Spins Board")]
+    [SerializeField]
+    private GameObject FSBoard_Object;
+    [SerializeField]
+    private TMP_Text FSnum_text;
+
     protected int Lines = 20;
 
     Coroutine AutoSpinRoutine = null;
@@ -139,6 +148,7 @@ public class SlotBehaviour : MonoBehaviour
     private int BetCounter = 0;
     private double currentBalance = 0;
     private double currentTotalBet = 0;
+    internal bool IsHoldSpin = false;
 
     private void Start()
     {
@@ -162,6 +172,7 @@ public class SlotBehaviour : MonoBehaviour
         if (Bet_minus) Bet_minus.onClick.AddListener(delegate { ChangeBet(false); });
 
         tweenHeight = (myImages.Length * IconSizeFactor) - 280;
+        if (FSBoard_Object) FSBoard_Object.SetActive(false);
         TriggerPlusMinusButtons(1);
     }
 
@@ -198,10 +209,11 @@ public class SlotBehaviour : MonoBehaviour
     {
         if (!IsFreeSpin)
         {
-
+            if (FSnum_text) FSnum_text.text = spins.ToString();
+            if (FSBoard_Object) FSBoard_Object.SetActive(true);
             IsFreeSpin = true;
             ToggleButtonGrp(false);
-
+            m_Gamble_Button.interactable = false;
             if (FreeSpinRoutine != null)
             {
                 StopCoroutine(FreeSpinRoutine);
@@ -220,8 +232,11 @@ public class SlotBehaviour : MonoBehaviour
             StartSlots(IsAutoSpin);
             yield return tweenroutine;
             yield return new WaitForSeconds(2);
+            if (FSnum_text) FSnum_text.text = (spinchances - i).ToString();
             i++;
         }
+        if (FSBoard_Object) FSBoard_Object.SetActive(false);
+        m_Gamble_Button.interactable = true;
         ToggleButtonGrp(true);
         IsFreeSpin = false;
     }
@@ -326,6 +341,35 @@ public class SlotBehaviour : MonoBehaviour
             StopCoroutine(StopAutoSpinCoroutine());
         }
     }
+
+    #region Hold Button To Start Auto Spin
+    //Start Auto Spin on Button Hold
+
+    internal void StartSpinRoutine()
+    {
+        IsHoldSpin = false;
+        Invoke("AutoSpinHold", 2f);
+    }
+
+    internal void StopSpinRoutine()
+    {
+        CancelInvoke("AutoSpinHold");
+        if (IsAutoSpin)
+        {
+            IsAutoSpin = false;
+            if (AutoSpinStop_Button) AutoSpinStop_Button.gameObject.SetActive(false);
+            //if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(true);
+            StartCoroutine(StopAutoSpinCoroutine());
+        }
+    }
+
+    private void AutoSpinHold()
+    {
+        Debug.Log("Auto Spin Started");
+        IsHoldSpin = true;
+        AutoSpin();
+    }
+    #endregion
 
     internal void CallCloseSocket()
     {
@@ -613,13 +657,25 @@ public class SlotBehaviour : MonoBehaviour
         }
         else
         {
-            ActivateGamble();
-            yield return new WaitForSeconds(1f);
+            if (!IsFreeSpin)
+            {
+                ActivateGamble();
+            }
+            yield return new WaitForSeconds(1.5f);
             //IsSpinning = false;
         }
-        if (SocketManager.resultData.freeSpins > 0 && !IsFreeSpin)
+        if (SocketManager.resultData.freeSpins.isNewAdded)
         {
-            uiManager.FreeSpinProcess((int)SocketManager.resultData.freeSpins);
+            if (IsFreeSpin)
+            {
+                IsFreeSpin = false;
+                if (FreeSpinRoutine != null)
+                {
+                    StopCoroutine(FreeSpinRoutine);
+                    FreeSpinRoutine = null;
+                }
+            }
+            uiManager.FreeSpinProcess((int)SocketManager.resultData.freeSpins.count);
             if (IsAutoSpin)
             {
                 StopAutoSpin();
@@ -639,6 +695,12 @@ public class SlotBehaviour : MonoBehaviour
         {
             Debug.Log("run this line exception " + SocketManager.playerdata.currentWining + "  " + SocketManager.GambleLimit);
         }
+    }
+
+    internal void DeactivateGamble()
+    {
+        StopAutoSpin();
+        ToggleButtonGrp(true);
     }
 
     internal void CheckWinPopups()
@@ -670,7 +732,7 @@ public class SlotBehaviour : MonoBehaviour
     internal void CheckBonusGame()
     {
         _bonusManager.startgame(SocketManager.resultData.BonusResult);
-        if (SocketManager.resultData.freeSpins > 0)
+        if (SocketManager.resultData.freeSpins.count > 0)
         {
             if (IsAutoSpin)
             {
@@ -863,7 +925,10 @@ public class SlotBehaviour : MonoBehaviour
         }
     }
 
-
+    internal void GambleCollect()
+    {
+        SocketManager.GambleCollectCall();
+    }
 
     #region TweeningCode
 
