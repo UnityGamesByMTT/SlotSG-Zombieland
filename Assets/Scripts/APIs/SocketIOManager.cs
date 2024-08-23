@@ -37,7 +37,8 @@ public class SocketIOManager : MonoBehaviour
     [SerializeField]
     internal JSHandler _jsManager;
 
-    protected string TestSocketURI = "https://dev.casinoparadize.com";
+    // protected string TestSocketURI = "https://dev.casinoparadize.com";
+    protected string TestSocketURI = "http://localhost:5000";
     protected string SocketURI = null;
     //protected string SocketURI = "https://6f01c04j-5000.inc1.devtunnels.ms/";
 
@@ -790,6 +791,7 @@ public class Symbol
     public object defaultAmount { get; set; }
     public object symbolsCount { get; set; }
     public object increaseValue { get; set; }
+    public object description { get; set; }
     public int freeSpin { get; set; }
 }
 
