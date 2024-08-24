@@ -49,6 +49,7 @@ public class SocketIOManager : MonoBehaviour
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
+    internal bool SetInit=false;
     private void Start()
     {
         // Debug.unityLogger.logEnabled = false;
@@ -401,16 +402,23 @@ public class SocketIOManager : MonoBehaviour
         {
             case "InitData":
                 {
-                    Debug.Log(jsonObject);
                     initialData = myData.message.GameData;
                     initUIData = myData.message.UIData;
                     playerdata = myData.message.PlayerData;
                     bonusdata = myData.message.BonusData;
-                    List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
-                    List<string> LinesString = ConvertListListIntToListString(initialData.Lines);
-                    InitialReels = RemoveQuotes(InitialReels);
-                    GambleLimit = myData.message.maxGambleBet;
-                    PopulateSlotSocket(InitialReels, LinesString);
+                    if (!SetInit)
+                    {
+                        Debug.Log(jsonObject);
+                        List<string> LinesString = ConvertListListIntToListString(initialData.Lines);
+                        List<string> InitialReels = ConvertListOfListsToStrings(initialData.Reel);
+                        InitialReels = RemoveQuotes(InitialReels);
+                        PopulateSlotSocket(InitialReels, LinesString);
+                        SetInit = true;
+                    }
+                    else
+                    {
+                        RefreshUI();
+                    }
                     break;
                 }
             case "ResultData":
@@ -442,6 +450,10 @@ public class SocketIOManager : MonoBehaviour
         }
     }
 
+    private void RefreshUI()
+    {
+        uiManager.InitialiseUIData(initUIData.AbtLogo.link, initUIData.AbtLogo.logoSprite, initUIData.ToULink, initUIData.PopLink, initUIData.paylines);
+    }
     private void PopulateSlotSocket(List<string> slotPop, List<string> LineIds)
     {
         slotManager.shuffleInitialMatrix();
@@ -452,10 +464,10 @@ public class SocketIOManager : MonoBehaviour
         //    slotManager.PopulateInitalSlots(i, points);
         //}
 
-        for (int i = 0; i < slotPop.Count; i++)
-        {
-            slotManager.LayoutReset(i);
-        }
+        // for (int i = 0; i < slotPop.Count; i++)
+        // {
+        //     slotManager.LayoutReset(i);
+        // }
 
         for (int i = 0; i < LineIds.Count; i++)
         {
