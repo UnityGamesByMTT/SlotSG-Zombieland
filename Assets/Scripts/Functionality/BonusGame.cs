@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Newtonsoft.Json;
 
 
 public class BonusGame : MonoBehaviour
@@ -24,8 +25,8 @@ public class BonusGame : MonoBehaviour
     [SerializeField] private Sprite[] Symbol5;
     [SerializeField] private GameObject RayCast_Panel;
 
-    [SerializeField] private List<int> result = new List<int>();
-    [SerializeField] private List<Button> tempButtonList = new List<Button>();
+    [SerializeField] private List<double> result = new List<double>();
+    // [SerializeField] private List<Button> tempButtonList = new List<Button>();
     int counter = 0;
     [SerializeField] private GameObject bonusGame;
     [SerializeField] private SlotBehaviour slotBehaviour;
@@ -35,28 +36,36 @@ public class BonusGame : MonoBehaviour
 
     void Start()
     {
-        if (btn[0]) btn[0].onClick.RemoveAllListeners();
-        if (btn[0]) btn[0].onClick.AddListener(delegate { OnSelectGrave(btn[0], imagelist[0], textList[0]); });
+        for (int i = 0; i < btn.Length; i++)
+        {
+            int index = i;
+            if (btn[index]) btn[index].onClick.RemoveAllListeners();
+            if (btn[index]) btn[index].onClick.AddListener(delegate { OnSelectGrave(btn[index], imagelist[index], textList[index]); });
+        }
+        // if (btn[0]) btn[0].onClick.RemoveAllListeners();
+        // if (btn[0]) btn[0].onClick.AddListener(delegate { OnSelectGrave(btn[0], imagelist[0], textList[0]); });
 
-        if (btn[1]) btn[1].onClick.RemoveAllListeners();
-        if (btn[1]) btn[1].onClick.AddListener(delegate { OnSelectGrave(btn[1], imagelist[1], textList[1]); });
+        // if (btn[1]) btn[1].onClick.RemoveAllListeners();
+        // if (btn[1]) btn[1].onClick.AddListener(delegate { OnSelectGrave(btn[1], imagelist[1], textList[1]); });
 
-        if (btn[2]) btn[2].onClick.RemoveAllListeners();
-        if (btn[2]) btn[2].onClick.AddListener(delegate { OnSelectGrave(btn[2], imagelist[2], textList[2]); });
+        // if (btn[2]) btn[2].onClick.RemoveAllListeners();
+        // if (btn[2]) btn[2].onClick.AddListener(delegate { OnSelectGrave(btn[2], imagelist[2], textList[2]); });
 
-        if (btn[3]) btn[3].onClick.RemoveAllListeners();
-        if (btn[3]) btn[3].onClick.AddListener(delegate { OnSelectGrave(btn[3], imagelist[3], textList[3]); });
+        // if (btn[3]) btn[3].onClick.RemoveAllListeners();
+        // if (btn[3]) btn[3].onClick.AddListener(delegate { OnSelectGrave(btn[3], imagelist[3], textList[3]); });
 
-        if (btn[4]) btn[4].onClick.RemoveAllListeners();
-        if (btn[4]) btn[4].onClick.AddListener(delegate { OnSelectGrave(btn[4], imagelist[4], textList[4]); });
+        // if (btn[4]) btn[4].onClick.RemoveAllListeners();
+        // if (btn[4]) btn[4].onClick.AddListener(delegate { OnSelectGrave(btn[4], imagelist[4], textList[4]); });
     }
 
-    internal void startgame(List<int> bonusResult)
+    internal void startgame(List<double> bonusResult)
     {
         if (audioManager) audioManager.SwitchBGSound(true);
         if (RayCast_Panel) RayCast_Panel.SetActive(false);
+        result.Clear();
         result = bonusResult;
         Initialize();
+        Debug.Log("bonus result in bonus game: ," + JsonConvert.SerializeObject(result));
 
         bonusGame.SetActive(true);
     }
@@ -70,10 +79,9 @@ public class BonusGame : MonoBehaviour
 
     private void Initialize()
     {
-        tempButtonList.Clear();
+        // tempButtonList.Clear();
         randomIndex.Clear();
         counter = 0;
-        result.Clear();
 
         foreach (var item in imagelist)
         {
@@ -97,28 +105,25 @@ public class BonusGame : MonoBehaviour
             randomIndex.Add(i);
         }
 
-        foreach (var item in btn)
-        {
-            tempButtonList.Add(item);
-        }
+        // foreach (var item in btn)
+        // {
+        //     tempButtonList.Add(item);
+        // }
     }
 
     void OnSelectGrave(Button btn, ImageAnimation img, TMP_Text text)
     {
         if (RayCast_Panel) RayCast_Panel.SetActive(true);
         btn.interactable = false;
-        tempButtonList.Remove(btn);
-        if (counter >= (result.Count - 1))
-        {
+        // tempButtonList.Remove(btn);
 
-            foreach (var item in tempButtonList)
-            {
-                item.interactable = false;
-            }
-        }
         int index = Random.Range(0, randomIndex.Count);
-        if (counter >= (result.Count - 1))
+        if (result[counter] == 0)
         {
+            // foreach (var item in tempButtonList)
+            // {
+            //     item.interactable = false;
+            // }
             if (audioManager) audioManager.PlayBonusAudio("lose");
             PopulateAnimationSprites(img, -1);
             text.text = "GAME OVER";
