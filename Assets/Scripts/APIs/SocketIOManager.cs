@@ -37,7 +37,8 @@ public class SocketIOManager : MonoBehaviour
     [SerializeField]
     internal JSHandler _jsManager;
 
-    protected string TestSocketURI = "https://dev.casinoparadize.com";
+    // protected string TestSocketURI = "https://dev.casinoparadize.com";
+    protected string TestSocketURI = "https://jmn3wfcb-5000.inc1.devtunnels.ms/";
     // protected string TestSocketURI = "http://localhost:5000";
     protected string SocketURI = null;
     //protected string SocketURI = "https://6f01c04j-5000.inc1.devtunnels.ms/";
@@ -423,7 +424,7 @@ public class SocketIOManager : MonoBehaviour
                 }
             case "ResultData":
                 {
-                    Debug.Log(jsonObject);
+                    // Debug.Log(jsonObject);
                     myData.message.GameData.FinalResultReel = ConvertListOfListsToStrings(myData.message.GameData.ResultReel);
                     myData.message.GameData.FinalsymbolsToEmit = TransformAndRemoveRecurring(myData.message.GameData.symbolsToEmit);
                     resultData = myData.message.GameData;
@@ -696,7 +697,7 @@ public class GameData
     public double jackpot { get; set; }
     public bool isBonus { get; set; }
     public double BonusStopIndex { get; set; }
-    public List<int> BonusResult { get; set; }
+    public List<double> BonusResult { get; set; }
 }
 
 [Serializable]

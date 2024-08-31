@@ -641,6 +641,7 @@ public class SlotBehaviour : MonoBehaviour
 
         if (SocketManager.resultData.isBonus)
         {
+                   
             CheckBonusGame();
         }
         else
