@@ -147,6 +147,7 @@ public class SlotBehaviour : MonoBehaviour
     internal bool CheckPopups = false;
     private int BetCounter = 0;
     private double currentBalance = 0;
+    internal double currentBet = 0;
     private double currentTotalBet = 0;
     internal bool IsHoldSpin = false;
 
@@ -562,6 +563,8 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator TweenRoutine()
     {
         gambleController.GambleTweeningAnim(false);
+        currentBet = SocketManager.initialData.Bets[BetCounter];
+
         if (currentBalance < currentTotalBet && !IsFreeSpin)
         {
             CompareBalance();
@@ -684,6 +687,8 @@ public class SlotBehaviour : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
         }
+
+        //_bonusManager.startgame(new List<double> { 20, 50, 100, 120, 0 });
     }
 
     private void ActivateGamble()
