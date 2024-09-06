@@ -140,7 +140,8 @@ public class BonusGame : MonoBehaviour
         if (audioManager) audioManager.PlayBonusAudio("win");
 
         PopulateAnimationSprites(img, randomIndex[index]);
-        text.text = "+" + result[counter].ToString("0.00");
+        double value = result[counter] * slotBehaviour.currentBet;
+        text.text = "+" + value.ToString("0.00");
         randomIndex.Remove(index);
 
 
