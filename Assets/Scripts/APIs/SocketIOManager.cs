@@ -494,7 +494,9 @@ public class SocketIOManager : MonoBehaviour
         slotManager.SetInitialUI();
 
         isLoaded = true;
+#if UNITY_WEBGL && !UNITY_EDITOR
         delayHideLoadingScreen();
+#endif
     }
 
     internal void AccumulateResult(double currBet)
