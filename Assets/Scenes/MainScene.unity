@@ -5287,7 +5287,7 @@ MonoBehaviour:
   GameExitBonus_Button: {fileID: 0}
   slotManager: {fileID: 2046803210}
   socketManager: {fileID: 500036492}
-  m_AwakeGameButton: {fileID: 0}
+  m_AwakeGameButton: {fileID: 1052046349}
 --- !u!1 &382792805
 GameObject:
   m_ObjectHideFlags: 0
