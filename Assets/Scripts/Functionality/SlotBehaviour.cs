@@ -151,6 +151,7 @@ public class SlotBehaviour : MonoBehaviour
     private double currentTotalBet = 0;
     internal bool IsHoldSpin = false;
 
+    private bool CheckSpinAudio=false;
     private void Start()
     {
 
@@ -545,13 +546,8 @@ public class SlotBehaviour : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        if (focus)
-        {
-            if (!IsSpinning)
-            {
-                if (audioController) audioController.StopWLAaudio();
-            }
-        }
+        audioController.CheckFocusFunction(focus, CheckSpinAudio);
+
     }
 
     [SerializeField]
@@ -574,6 +570,7 @@ public class SlotBehaviour : MonoBehaviour
         }
         if (audioController) audioController.PlayWLAudio("spin");
         IsSpinning = true;
+        CheckSpinAudio=true;
         ToggleButtonGrp(false);
         for (int i = 0; i < numberOfSlots; i++)
         {
@@ -923,6 +920,7 @@ public class SlotBehaviour : MonoBehaviour
         {
             if (audioController) audioController.StopWLAaudio();
         }
+        CheckSpinAudio=false;
     }
 
     private void GenerateMatrix(int value)
