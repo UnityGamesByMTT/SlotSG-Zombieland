@@ -136,12 +136,21 @@ public class UIManager : MonoBehaviour
 
     private int FreeSpins;
 
-
+    [SerializeField] private Button m_AwakeGameButton;
     private void Awake()
     {
         // if (Loading_Object) Loading_Object.SetActive(true);
         // StartCoroutine(LoadingRoutine());
+        SimulateClickByDefault();
     }
+
+    private void SimulateClickByDefault()
+    {
+        Debug.Log("Awaken The Game...");
+        m_AwakeGameButton.onClick.AddListener(() => { Debug.Log("Called The Game..."); });
+        m_AwakeGameButton.onClick.Invoke();
+    }
+
 
     private IEnumerator LoadingRoutine()
     {
@@ -472,7 +481,6 @@ public class UIManager : MonoBehaviour
     {
         audioController.ChangeVolume("wl", Sound_slider.value);
         audioController.ChangeVolume("button", Sound_slider.value);
-
     }
 
     private void ChangeMusic()
