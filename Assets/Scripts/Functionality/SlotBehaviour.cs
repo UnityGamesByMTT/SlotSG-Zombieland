@@ -187,7 +187,8 @@ public class SlotBehaviour : MonoBehaviour
 
             IsAutoSpin = true;
             if (AutoSpinStop_Button) AutoSpinStop_Button.gameObject.SetActive(true);
-            if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
+            // if (AutoSpin_Button) AutoSpin_Button.gameObject.SetActive(false);
+            ToggleButtonGrp(false);
             if (AutoSpinRoutine != null)
             {
                 StopCoroutine(AutoSpinRoutine);
@@ -352,8 +353,11 @@ public class SlotBehaviour : MonoBehaviour
 
     internal void StartSpinRoutine()
     {
+        if(!IsSpinning){
         IsHoldSpin = false;
         Invoke("AutoSpinHold", 2f);
+        }
+
     }
 
     internal void StopSpinRoutine()
