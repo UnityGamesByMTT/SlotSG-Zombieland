@@ -152,6 +152,8 @@ public class SlotBehaviour : MonoBehaviour
     internal bool IsHoldSpin = false;
 
     private bool CheckSpinAudio=false;
+
+    private Tweener WinTween;
     private void Start()
     {
 
@@ -540,6 +542,7 @@ public class SlotBehaviour : MonoBehaviour
         {
             StopGameAnimation();
         }
+        WinningsAnim(false);
         PayCalculator.ResetLines();
         tweenroutine = StartCoroutine(TweenRoutine());
     }
@@ -651,6 +654,9 @@ public class SlotBehaviour : MonoBehaviour
         }
 
         yield return new WaitUntil(() => !CheckPopups);
+        if (SocketManager.resultData.WinAmout > 0)
+        WinningsAnim(true);
+
         if (!IsAutoSpin && !IsFreeSpin)
         {
             ActivateGamble();
@@ -688,6 +694,18 @@ public class SlotBehaviour : MonoBehaviour
         //_bonusManager.startgame(new List<double> { 20, 50, 100, 120, 0 });
     }
 
+    private void WinningsAnim(bool IsStart)
+    {
+        if (IsStart)
+        {
+            WinTween = TotalWin_text.transform.DOScale(new Vector2(1.5f, 1.5f), 1f).SetLoops(-1, LoopType.Yoyo).SetDelay(0);
+        }
+        else
+        {
+            WinTween.Kill();
+            TotalWin_text.transform.localScale = Vector3.one;
+        }
+    }
     private void ActivateGamble()
     {
         if (SocketManager.playerdata.currentWining > 0 && SocketManager.playerdata.currentWining <= SocketManager.GambleLimit)
