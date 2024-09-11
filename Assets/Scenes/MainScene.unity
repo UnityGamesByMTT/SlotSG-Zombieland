@@ -5284,7 +5284,7 @@ MonoBehaviour:
   audioController: {fileID: 1523547263}
   GameExit_Button: {fileID: 1482929057}
   GameExitSplash_Button: {fileID: 1777599752}
-  GameExitBonus_Button: {fileID: 0}
+  GameExitBonus_Button: {fileID: 1196933685}
   slotManager: {fileID: 2046803210}
   socketManager: {fileID: 500036492}
   m_AwakeGameButton: {fileID: 1052046349}
