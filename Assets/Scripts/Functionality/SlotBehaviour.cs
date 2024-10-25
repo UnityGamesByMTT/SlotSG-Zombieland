@@ -566,8 +566,8 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator TweenRoutine()
     {
         gambleController.GambleTweeningAnim(false);
-        currentBet = SocketManager.initialData.Bets[BetCounter];
-
+        currentBet = SocketManager.initialData.Bets[BetCounter]*SocketManager.initialData.Lines.Count;
+        // currentTotalBet=SocketManager.initialData.Bets[BetCounter]*SocketManager.initialData.Lines.Count;
         if (currentBalance < currentTotalBet && !IsFreeSpin)
         {
             CompareBalance();
@@ -637,6 +637,8 @@ public class SlotBehaviour : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
+        currentBalance=SocketManager.playerdata.Balance;
+
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit, SocketManager.resultData.jackpot);
         KillAllTweens();
 
