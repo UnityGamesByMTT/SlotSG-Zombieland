@@ -151,7 +151,7 @@ public class SlotBehaviour : MonoBehaviour
     private double currentTotalBet = 0;
     internal bool IsHoldSpin = false;
 
-    private bool CheckSpinAudio=false;
+    private bool CheckSpinAudio = false;
 
     private Tweener WinTween;
     private void Start()
@@ -275,7 +275,7 @@ public class SlotBehaviour : MonoBehaviour
 
     private void TriggerPlusMinusButtons(int m_cmd)
     {
-        switch(m_cmd)
+        switch (m_cmd)
         {
             case 0:
                 Bet_plus.interactable = true;
@@ -297,14 +297,14 @@ public class SlotBehaviour : MonoBehaviour
         if (currentBalance < currentTotalBet)
         {
             uiManager.LowBalPopup();
-            if (AutoSpin_Button) AutoSpin_Button.interactable = false;
-            if (SlotStart_Button) SlotStart_Button.interactable = false;
+            // if (AutoSpin_Button) AutoSpin_Button.interactable = false;
+            // if (SlotStart_Button) SlotStart_Button.interactable = false;
         }
-        else
-        {
-            if (AutoSpin_Button) AutoSpin_Button.interactable = true;
-            if (SlotStart_Button) SlotStart_Button.interactable = true;
-        }
+        // else
+        // {
+        //     if (AutoSpin_Button) AutoSpin_Button.interactable = true;
+        //     if (SlotStart_Button) SlotStart_Button.interactable = true;
+        // }
     }
 
     private void StopAutoSpin()
@@ -353,9 +353,10 @@ public class SlotBehaviour : MonoBehaviour
 
     internal void StartSpinRoutine()
     {
-        if(!IsSpinning){
-        IsHoldSpin = false;
-        Invoke("AutoSpinHold", 2f);
+        if (!IsSpinning)
+        {
+            IsHoldSpin = false;
+            Invoke("AutoSpinHold", 2f);
         }
 
     }
@@ -566,18 +567,22 @@ public class SlotBehaviour : MonoBehaviour
     private IEnumerator TweenRoutine()
     {
         gambleController.GambleTweeningAnim(false);
-        currentBet = SocketManager.initialData.Bets[BetCounter];
-
+        currentBet = SocketManager.initialData.Bets[BetCounter] * SocketManager.initialData.Lines.Count;
+        // currentTotalBet=SocketManager.initialData.Bets[BetCounter]*SocketManager.initialData.Lines.Count;
         if (currentBalance < currentTotalBet && !IsFreeSpin)
         {
             CompareBalance();
-            StopAutoSpin();
-            yield return new WaitForSeconds(1);
+            if (IsAutoSpin)
+            {
+                StopAutoSpin();
+                yield return new WaitForSeconds(1);
+            }
+            ToggleButtonGrp(true);
             yield break;
         }
         if (audioController) audioController.PlayWLAudio("spin");
         IsSpinning = true;
-        CheckSpinAudio=true;
+        CheckSpinAudio = true;
         ToggleButtonGrp(false);
         for (int i = 0; i < numberOfSlots; i++)
         {
@@ -619,6 +624,7 @@ public class SlotBehaviour : MonoBehaviour
 
         yield return new WaitUntil(() => SocketManager.isResultdone);
 
+        currentBalance = SocketManager.playerdata.Balance;
         for (int j = 0; j < SocketManager.resultData.ResultReel.Count; j++)
         {
             List<int> resultnum = SocketManager.resultData.FinalResultReel[j]?.Split(',')?.Select(Int32.Parse)?.ToList();
@@ -637,6 +643,7 @@ public class SlotBehaviour : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.3f);
+
         CheckPayoutLineBackend(SocketManager.resultData.linesToEmit, SocketManager.resultData.FinalsymbolsToEmit, SocketManager.resultData.jackpot);
         KillAllTweens();
 
@@ -649,7 +656,7 @@ public class SlotBehaviour : MonoBehaviour
 
         if (SocketManager.resultData.isBonus)
         {
-                   
+
             CheckBonusGame();
         }
         else
@@ -659,7 +666,7 @@ public class SlotBehaviour : MonoBehaviour
 
         yield return new WaitUntil(() => !CheckPopups);
         if (SocketManager.resultData.WinAmout > 0)
-        WinningsAnim(true);
+            WinningsAnim(true);
 
         if (!IsAutoSpin && !IsFreeSpin)
         {
@@ -942,7 +949,7 @@ public class SlotBehaviour : MonoBehaviour
         {
             if (audioController) audioController.StopWLAaudio();
         }
-        CheckSpinAudio=false;
+        CheckSpinAudio = false;
     }
 
     private void GenerateMatrix(int value)
