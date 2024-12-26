@@ -810,7 +810,7 @@ public class SlotBehaviour : MonoBehaviour
     {
         StopAutoSpin();
         ToggleButtonGrp(true);
-        TurboToggle();
+        //TurboToggle();
     }
 
     internal void CheckWinPopups()
