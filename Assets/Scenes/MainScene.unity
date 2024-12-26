@@ -7236,7 +7236,7 @@ MonoBehaviour:
   uiManager: {fileID: 377874625}
   bonusdata: []
   _jsManager: {fileID: 500036493}
-  testToken: 
+  testToken: dtyhh
 --- !u!114 &500036493
 MonoBehaviour:
   m_ObjectHideFlags: 0
