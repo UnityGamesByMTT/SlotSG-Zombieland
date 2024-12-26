@@ -163,6 +163,7 @@ public class SlotBehaviour : MonoBehaviour
     private bool CheckSpinAudio = false;
 
     private Tweener WinTween;
+    private Sprite turboOriginalSprite;
     private void Start()
     {
 
@@ -192,6 +193,7 @@ public class SlotBehaviour : MonoBehaviour
 
         tweenHeight = (myImages.Length * IconSizeFactor) - 280;
         if (FSBoard_Object) FSBoard_Object.SetActive(false);
+        turboOriginalSprite = Turbo_Button.GetComponent<Image>().sprite;
         //TriggerPlusMinusButtons(0);
     }
 
@@ -219,15 +221,16 @@ public class SlotBehaviour : MonoBehaviour
         if (IsTurboOn)
         {
             IsTurboOn = false;
-            // Turbo_Button.GetComponent<ImageAnimation>().StopAnimation();
-            // Turbo_Button.image.sprite = TurboToggleSprites[0];
-            // Turbo_Button.image.color = new Color(0.86f, 0.86f, 0.86f, 1);
+            Turbo_Button.GetComponent<ImageAnimation>().StopAnimation();
+            Turbo_Button.image.sprite = turboOriginalSprite;
+            //Turbo_Button.image.sprite = TurboToggleSprites[0];
+            //Turbo_Button.image.color = new Color(0.86f, 0.86f, 0.86f, 1);
         }
         else
         {
             IsTurboOn = true;
-            // Turbo_Button.GetComponent<ImageAnimation>().StartAnimation();
-            // Turbo_Button.image.color = new Color(1, 1, 1, 1);
+            Turbo_Button.GetComponent<ImageAnimation>().StartAnimation();
+            //Turbo_Button.image.color = new Color(1, 1, 1, 1);
         }
     }
 
@@ -707,7 +710,7 @@ public class SlotBehaviour : MonoBehaviour
 
         for (int i = 0; i < numberOfSlots; i++)
         {
-            yield return StopTweening(5, Slot_Transform[i], i,StopSpinToggle);
+            yield return StopTweening(5, Slot_Transform[i], i, StopSpinToggle);
         }
 
         StopSpinToggle = false;
@@ -807,6 +810,7 @@ public class SlotBehaviour : MonoBehaviour
     {
         StopAutoSpin();
         ToggleButtonGrp(true);
+        TurboToggle();
     }
 
     internal void CheckWinPopups()
@@ -847,7 +851,7 @@ public class SlotBehaviour : MonoBehaviour
         }
     }
 
-    
+
 
     void ToggleButtonGrp(bool toggle)
     {
@@ -860,14 +864,14 @@ public class SlotBehaviour : MonoBehaviour
         if (Bet_plus) Bet_plus.interactable = toggle;
         if (Bet_minus) Bet_minus.interactable = toggle;
 
-     /*   if (toggle)
-        {
-            PlusMinusCheck();
-        }
-        else
-        {
-            if (Bet_plus) Bet_plus.interactable = toggle;
-        } */
+        /*   if (toggle)
+           {
+               PlusMinusCheck();
+           }
+           else
+           {
+               if (Bet_plus) Bet_plus.interactable = toggle;
+           } */
 
     }
 
@@ -1035,7 +1039,7 @@ public class SlotBehaviour : MonoBehaviour
         tweener.Play();
         alltweens.Add(tweener);
     }
-    private IEnumerator StopTweening(int reqpos, Transform slotTransform, int index ,bool isStop)
+    private IEnumerator StopTweening(int reqpos, Transform slotTransform, int index, bool isStop)
     {
         alltweens[index].Pause();
         int tweenpos = (reqpos * (IconSizeFactor + SpaceFactor)) - (IconSizeFactor + (2 * SpaceFactor));
