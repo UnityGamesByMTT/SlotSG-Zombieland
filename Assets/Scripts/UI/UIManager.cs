@@ -100,6 +100,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Sprite HugeWin_Sprite;
     [SerializeField] private Sprite BigWin_Sprite;
     [SerializeField] private Sprite MegaWin_Sprite;
+    [SerializeField] private Button MegaWinHideBtn;
 
     [Header("FreeSpins Popup")]
     [SerializeField]
@@ -234,6 +235,8 @@ public class UIManager : MonoBehaviour
         if (Setting_back_button) Setting_back_button.onClick.RemoveAllListeners();
         if (Setting_back_button) Setting_back_button.onClick.AddListener(delegate { ClosePopup(Setting_panel); });
 
+        if (MegaWinHideBtn) MegaWinHideBtn.onClick.RemoveAllListeners();
+        if (MegaWinHideBtn) MegaWinHideBtn.onClick.AddListener(OnClickMegaWinHide);
         //if (Gamble_button) Gamble_button.onClick.RemoveAllListeners();
         //if (Gamble_button) Gamble_button.onClick.AddListener(delegate { OpenPopup(Gamble_game); });
 
@@ -309,6 +312,9 @@ public class UIManager : MonoBehaviour
         if (FreeSpinPopup_Object) FreeSpinPopup_Object.SetActive(true);
         if (Free_Text) Free_Text.text = "You are awarded with " + spins.ToString() + " extra free spins.";
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
+        DOVirtual.DelayedCall(2f, () => {
+            StartFreeSpins(spins);
+        });
     }
 
     internal void PopulateWin(int type, double amount)
@@ -335,16 +341,16 @@ public class UIManager : MonoBehaviour
             if (megawin_text) megawin_text.text = initAmount.ToString("f2");
         });
 
-        DOVirtual.DelayedCall(3.5f, () =>
-        {
-            if (MainPopup_Object) MainPopup_Object.SetActive(false);
-            if (megawin) megawin.SetActive(false);
-            if (megawin_text) megawin_text.text = "0";
-            slotManager.CheckPopups = false;
-
-        });
+        DOVirtual.DelayedCall(3.5f, OnClickMegaWinHide);
     }
 
+    private void OnClickMegaWinHide()
+    {
+        if (MainPopup_Object) MainPopup_Object.SetActive(false);
+        if (megawin) megawin.SetActive(false);
+        if (megawin_text) megawin_text.text = "0";
+        slotManager.CheckPopups = false;
+    }
     internal void ADfunction()
     {
         OpenPopup(ADPopup_Object);

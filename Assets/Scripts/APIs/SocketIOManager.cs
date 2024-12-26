@@ -41,8 +41,8 @@ public class SocketIOManager : MonoBehaviour
     internal JSHandler _jsManager;
 
     // protected string TestSocketURI = "https://dev.casinoparadize.com";
-    protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
-    // protected string TestSocketURI = "http://localhost:5000";
+   // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
+     protected string TestSocketURI = "http://localhost:5000";
     protected string SocketURI = null;
     //protected string SocketURI = "https://6f01c04j-5000.inc1.devtunnels.ms/";
 
@@ -53,7 +53,7 @@ public class SocketIOManager : MonoBehaviour
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
-    internal bool SetInit=false;
+    internal bool SetInit = false;
     private void Start()
     {
         // Debug.unityLogger.logEnabled = false;
