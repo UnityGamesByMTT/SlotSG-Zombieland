@@ -135,7 +135,7 @@ public class UIManager : MonoBehaviour
 
     private bool isExit = false;
 
-    private int FreeSpins;
+    internal int FreeSpins;
 
     [SerializeField] private Button m_AwakeGameButton;
     private void Awake()
@@ -308,9 +308,13 @@ public class UIManager : MonoBehaviour
 
     internal void FreeSpinProcess(int spins)
     {
+
+        int ExtraSpins = spins - FreeSpins;
         FreeSpins = spins;
+
+
         if (FreeSpinPopup_Object) FreeSpinPopup_Object.SetActive(true);
-        if (Free_Text) Free_Text.text = "You are awarded with " + spins.ToString() + " extra free spins.";
+        if (Free_Text) Free_Text.text = "You are awarded with " + ExtraSpins.ToString() + " extra free spins.";
         if (MainPopup_Object) MainPopup_Object.SetActive(true);
         DOVirtual.DelayedCall(2f, () => {
             StartFreeSpins(spins);
