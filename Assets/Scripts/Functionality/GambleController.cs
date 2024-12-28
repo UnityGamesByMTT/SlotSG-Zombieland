@@ -10,7 +10,7 @@ public class GambleController : MonoBehaviour
     // UI and Components References
     [Header("UI and Components")]
     [SerializeField] private GameObject gamble_game; // The main gamble game object
-    [SerializeField] private Button doubleButton; // Button for doubling the bet
+    [SerializeField] private Button doubleButton; // Button for starting gameble game
     [SerializeField] private SocketIOManager socketManager; // Reference to the SocketIO Manager
     [SerializeField] private AudioController audioController; // Reference to the Audio Controller
     [SerializeField] internal List<CardFlip> allcards = new List<CardFlip>(); // List of all card flip objects
@@ -41,6 +41,7 @@ public class GambleController : MonoBehaviour
     private Sprite spare2card_Sprite; // Sprite for the second spare card
     internal bool gambleStart = false; // Indicates if the gamble has started
     internal bool isResult = false; // Indicates if the result has been received
+    private bool isAutoSpinOn;
 
     private Tweener Gamble_Tween_Scale = null; // Tweener for scaling the double button
 
@@ -62,7 +63,7 @@ public class GambleController : MonoBehaviour
             m_Collect_Button.onClick.AddListener(OnReset);
         }
 
-        // Double Button Setup
+         //Double Button Setup
         if (m_Double_Button)
         {
             m_Double_Button.onClick.RemoveAllListeners();
@@ -90,6 +91,10 @@ public class GambleController : MonoBehaviour
     void StartGamblegame(bool isRepeat = false)
     {
         if (GambleEnd_Object) GambleEnd_Object.SetActive(false); // Hide end screen
+
+        if(!isRepeat)
+        isAutoSpinOn = slotController.IsAutoSpin;
+
         GambleTweeningAnim(false); // Stop animation
         slotController.DeactivateGamble(); // Deactivate the gamble slot
         winamount.text = "0"; // Reset win amount text
@@ -108,6 +113,10 @@ public class GambleController : MonoBehaviour
     private void OnReset()
     {
         if (slotController) slotController.GambleCollect(); // Collect winnings
+        if (isAutoSpinOn)
+        {
+            slotController.AutoSpin();
+        }
         NormalCollectFunction(); // Reset the gamble game
     }
 
@@ -131,6 +140,7 @@ public class GambleController : MonoBehaviour
         DealerCard_Script.once = false;
 
         toggleDoubleButton(false); // Disable double button
+
     }
 
     #endregion
@@ -241,6 +251,7 @@ public class GambleController : MonoBehaviour
         yield return new WaitForSeconds(2);
         slotController.updateBalance();
         if (gamble_game) gamble_game.SetActive(false);
+
         allcards.ForEach((element) =>
         {
             element.Card_Button.image.sprite = cardCover;
@@ -249,6 +260,11 @@ public class GambleController : MonoBehaviour
         DealerCard_Script.Card_Button.image.sprite = cardCover;
         DealerCard_Script.once = false;
         toggleDoubleButton(false);
+        if (isAutoSpinOn) {
+
+
+            slotController.AutoSpin();
+        }
     }
 
     #endregion

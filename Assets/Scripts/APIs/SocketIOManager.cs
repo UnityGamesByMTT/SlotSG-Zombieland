@@ -505,6 +505,7 @@ public class SocketIOManager : MonoBehaviour
 
     internal void OnGamble()
     {
+        Debug.Log("called in gamble");
         isResultdone = false;
         RiskData message = new RiskData();
 
@@ -527,6 +528,8 @@ public class SocketIOManager : MonoBehaviour
 
     internal void GambleCollectCall()
     {
+        Debug.Log("called in gamble");
+
         ExitData message = new ExitData();
         message.id = "GAMBLECOLLECT";
         string json = JsonUtility.ToJson(message);
@@ -535,6 +538,7 @@ public class SocketIOManager : MonoBehaviour
 
     internal void OnCollect()
     {
+        Debug.Log("called in gamble ");
         isResultdone = false;
 
         RiskData message = new RiskData();
