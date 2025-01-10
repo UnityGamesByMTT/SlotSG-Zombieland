@@ -380,15 +380,15 @@ public class UIManager : MonoBehaviour
             string text = null;
             if (paylines.symbols[i].Multiplier[0][0] != 0)
             {
-                text += "<color=yellow>5x - </color>" + paylines.symbols[i].Multiplier[0][0];
+                text += "<color=yellow>5x - </color>" + paylines.symbols[i].Multiplier[0][0]+"x";
             }
             if (paylines.symbols[i].Multiplier[1][0] != 0)
             {
-                text += "\n<color=yellow>4x - </color>" + paylines.symbols[i].Multiplier[1][0];
+                text += "\n<color=yellow>4x - </color>" + paylines.symbols[i].Multiplier[1][0]+"x";
             }
             if (paylines.symbols[i].Multiplier[2][0] != 0)
             {
-                text += "\n<color=yellow>3x - </color>" + paylines.symbols[i].Multiplier[2][0];
+                text += "\n<color=yellow>3x - </color>" + paylines.symbols[i].Multiplier[2][0]+"x";
             }
             if (SymbolsText[i]) SymbolsText[i].text = text;
         }
