@@ -42,7 +42,7 @@ public class SocketIOManager : MonoBehaviour
 
     // protected string TestSocketURI = "https://dev.casinoparadize.com";
    // protected string TestSocketURI = "https://game-crm-rtp-backend.onrender.com/";
-     protected string TestSocketURI = "http://localhost:5000";
+     protected string TestSocketURI = "http://localhost:5001";
     protected string SocketURI = null;
     //protected string SocketURI = "https://6f01c04j-5000.inc1.devtunnels.ms/";
 
@@ -50,6 +50,7 @@ public class SocketIOManager : MonoBehaviour
     private string testToken;
 
     protected string gameID = "SL-ZML";
+   // protected string gameID = "";
     private const int maxReconnectionAttempts = 6;
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
