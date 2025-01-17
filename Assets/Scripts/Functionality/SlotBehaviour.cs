@@ -140,7 +140,7 @@ public class SlotBehaviour : MonoBehaviour
     [SerializeField]
     private TMP_Text FSnum_text;
 
-    protected int Lines = 20;
+    internal int Lines = 20;
 
     Coroutine AutoSpinRoutine = null;
     private Coroutine FreeSpinRoutine = null;
@@ -150,7 +150,7 @@ public class SlotBehaviour : MonoBehaviour
     bool SlotRunning = false;
     private bool IsFreeSpin = false;
     internal bool CheckPopups = false;
-    private int BetCounter = 0;
+    internal int BetCounter = 0;
     private double currentBalance = 0;
     internal double currentBet = 0;
     private double currentTotalBet = 0;
@@ -712,10 +712,11 @@ public class SlotBehaviour : MonoBehaviour
 
         //  yield return new WaitForSeconds(0.5f);
 
-        if (IsTurboOn || IsFreeSpin)                                                      // changes
+        if (IsTurboOn)                                                      // changes
         {
 
             yield return new WaitForSeconds(0.1f);
+            StopSpinToggle = true;
         }
         else
         {

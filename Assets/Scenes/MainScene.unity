@@ -7629,7 +7629,7 @@ MonoBehaviour:
   uiManager: {fileID: 377874625}
   bonusdata: []
   _jsManager: {fileID: 500036493}
-  testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU1MTA1MGJjMDc4ODcyMWUxYmEwMSIsInVzZXJuYW1lIjoiZGV2MDEiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzM1ODE4ODAwLCJleHAiOjE3MzY0MjM2MDB9.hKDpkZ-0X1fTml7zAHopAAU25jMzjzzx0eLSykG7VqU
+  testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NjU1MTA1MGJjMDc4ODcyMWUxYmEwMSIsInVzZXJuYW1lIjoiZGV2MDEiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzM3MDg1OTE2LCJleHAiOjE3Mzc2OTA3MTZ9.mNyzZqnK4Wcrikp5yrNtvuQ7pCJa--qzC1-MTn3P4FM
 --- !u!114 &500036493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20938,6 +20938,7 @@ MonoBehaviour:
   bonusGame: {fileID: 1483849627}
   slotBehaviour: {fileID: 2046803210}
   audioManager: {fileID: 1523547263}
+  SocketManager: {fileID: 500036492}
 --- !u!4 &1450274933
 Transform:
   m_ObjectHideFlags: 0
