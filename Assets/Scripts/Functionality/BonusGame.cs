@@ -31,6 +31,7 @@ public class BonusGame : MonoBehaviour
     [SerializeField] private GameObject bonusGame;
     [SerializeField] private SlotBehaviour slotBehaviour;
     [SerializeField] private AudioController audioManager;
+    [SerializeField] private SocketIOManager SocketManager;
     List<int> randomIndex = new List<int>();
 
 
@@ -140,8 +141,16 @@ public class BonusGame : MonoBehaviour
         if (audioManager) audioManager.PlayBonusAudio("win");
 
         PopulateAnimationSprites(img, randomIndex[index]);
-        double value = result[counter] * slotBehaviour.currentBet;
-        text.text = "+" + value.ToString("0.00");
+
+        
+//       Debug.Log("DEV_Test" + SocketManager.initialData.Bets[slotBehaviour.BetCounter]);
+
+        double value = result[counter] * SocketManager.initialData.Bets[slotBehaviour.BetCounter];
+        text.text = "+" + value.ToString("0.000");
+
+    //    Debug.Log("DEV_Test" + value);
+
+
         randomIndex.Remove(index);
 
 
