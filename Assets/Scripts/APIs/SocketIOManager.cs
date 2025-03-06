@@ -565,6 +565,13 @@ public class SocketIOManager : MonoBehaviour
 
         isLoaded = true;
         Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
+#if UNITY_WEBGL && !UNITY_EDITOR
+    Application.ExternalEval(@"
+      if(window.ReactNativeWebView){
+        window.ReactNativeWebView.postMessage('OnEnter');
+      }
+    ");
+#endif
 
     }
 
