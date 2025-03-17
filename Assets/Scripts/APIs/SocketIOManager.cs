@@ -190,7 +190,7 @@ public class SocketIOManager : MonoBehaviour
                 console.error('SendMessage function is not available.');
             }
         } catch (error) {
-            window.ReactNativeWebView.postMessage('An error occurred');
+            window.ReactNativeWebView.postMessage('An error occurred ', JSON.stringify(error));
             console.error('An error occurred:', error);
         }
           }else{
