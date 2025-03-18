@@ -591,7 +591,15 @@ public class SocketIOManager : MonoBehaviour
     internal void AccumulateResult(double currBet)
     {
         isResultdone = false;
-        SendDataWithNamespace("SPIN", currBet, "message");
+        MessageData message = new MessageData();
+        message.data = new BetData();
+        message.data.currentBet = currBet;
+        message.data.spins = 1;
+        message.data.currentLines = 20;
+        message.id = "SPIN";
+        // Serialize message data to JSON
+        string json = JsonUtility.ToJson(message);
+        SendDataWithNamespace("message", json);
     }
 
     internal void OnGamble()
