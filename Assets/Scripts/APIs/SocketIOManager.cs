@@ -36,6 +36,7 @@ public class SocketIOManager : MonoBehaviour
     internal bool isResultdone = false;
 
     private SocketManager manager;
+    private Socket gameSocket;
 
     [SerializeField]
     internal JSHandler _jsManager;
@@ -55,6 +56,8 @@ public class SocketIOManager : MonoBehaviour
     private readonly TimeSpan reconnectionDelay = TimeSpan.FromSeconds(10);
 
     internal bool SetInit = false;
+
+    protected string nameSpace = "game";
     private void Start()
     {
         // Debug.unityLogger.logEnabled = false;
@@ -68,6 +71,7 @@ public class SocketIOManager : MonoBehaviour
         var data = JsonUtility.FromJson<AuthTokenData>(jsonData);
         SocketURI = data.socketURL;
         myAuth = data.cookie;
+        nameSpace = data.nameSpace;
     }
 
     string myAuth = null;
@@ -138,6 +142,7 @@ public class SocketIOManager : MonoBehaviour
         options.ReconnectionAttempts = maxReconnectionAttempts;
         options.ReconnectionDelay = reconnectionDelay;
         options.Reconnection = true;
+        options.ConnectWith = Best.SocketIO.Transports.TransportTypes.WebSocket;
 
         Application.ExternalCall("window.parent.postMessage", "authToken", "*");
 
@@ -198,7 +203,8 @@ public class SocketIOManager : MonoBehaviour
                   if (event.data.type === 'authToken') {
                       var combinedData = JSON.stringify({
                           cookie: event.data.cookie,
-                          socketURL: event.data.socketURL
+                          socketURL: event.data.socketURL,
+                          nameSpace: event.data?.nameSpace ? event.data.nameSpace : ''
                       });
                       // Send the combined data to Unity
                       SendMessage('SocketManager', 'ReceiveAuthToken', combinedData);
@@ -287,19 +293,25 @@ public class SocketIOManager : MonoBehaviour
         // Create and setup SocketManager
         this.manager = new SocketManager(new Uri(SocketURI), options);
 #endif
-
+        Debug.Log(nameSpace);
+        if (nameSpace == null || nameSpace == "")
+        {
+            gameSocket = this.manager.Socket;
+        }
+        else
+            gameSocket = this.manager.GetSocket("/" + nameSpace);
         // Set subscriptions
-        this.manager.Socket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
-        this.manager.Socket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
-        this.manager.Socket.On<string>(SocketIOEventTypes.Error, OnError);
-        this.manager.Socket.On<string>("message", OnListenEvent);
-        this.manager.Socket.On<bool>("socketState", OnSocketState);
-        this.manager.Socket.On<string>("internalError", OnSocketError);
-        this.manager.Socket.On<string>("alert", OnSocketAlert);
-        this.manager.Socket.On<string>("AnotherDevice", OnSocketOtherDevice);
+        gameSocket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
+        gameSocket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
+        gameSocket.On<string>(SocketIOEventTypes.Error, OnError);
+        gameSocket.On<string>("message", OnListenEvent);
+        gameSocket.On<bool>("socketState", OnSocketState);
+        gameSocket.On<string>("internalError", OnSocketError);
+        gameSocket.On<string>("alert", OnSocketAlert);
+        gameSocket.On<string>("AnotherDevice", OnSocketOtherDevice);
 
         // Start connecting to the server
-        this.manager.Open();
+       // this.manager.Open();
     }
 
     // Connected event handler implementation
@@ -377,16 +389,16 @@ public class SocketIOManager : MonoBehaviour
     private void SendDataWithNamespace(string eventName, string json = null)
     {
         // Send the message
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
+        if (gameSocket != null && gameSocket.IsOpen)
         {
             if (json != null)
             {
-                this.manager.Socket.Emit(eventName, json);
+                gameSocket.Emit(eventName, json);
                 Debug.Log("JSON data sent: " + json);
             }
             else
             {
-                this.manager.Socket.Emit(eventName);
+                gameSocket.Emit(eventName);
             }
         }
         else
@@ -394,6 +406,7 @@ public class SocketIOManager : MonoBehaviour
             Debug.LogWarning("Socket is not connected.");
         }
     }
+
 
     private void InitRequest(string eventName)
     {
@@ -920,4 +933,6 @@ public class AuthTokenData
 {
     public string cookie;
     public string socketURL;
+
+    public string nameSpace = "";
 }
