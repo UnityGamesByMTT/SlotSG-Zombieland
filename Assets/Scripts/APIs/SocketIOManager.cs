@@ -72,8 +72,9 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("This is the new version of the game 1.2");
-        }");
+            window.ReactNativeWebView.postMessage('This is the new version of the game 1.2');
+          }
+        ");
         #endif
     }
 
@@ -241,9 +242,17 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket OnConnected");
-        }");
+            window.ReactNativeWebView.postMessage('Game Socket Connected');
+          }
+        ");
         #endif
+        // #if UNITY_WEBGL && !UNITY_EDITOR
+        //     Application.ExternalEval(@"
+        //       if(window.ReactNativeWebView){
+        //         window.ReactNativeWebView.postMessage('onExit');
+        //       }
+        //     ");
+        // #endif
     }
 
     private void OnDisconnected(string response)
@@ -251,12 +260,13 @@ public class SocketIOManager : MonoBehaviour
         Debug.Log("Disconnected from the server");
         StopAllCoroutines();
         uiManager.DisconnectionPopup();
-        #if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket OnDisconnected");
-        }");
-        #endif
+            window.ReactNativeWebView.postMessage('Game Socket OnDisconnected');
+          }
+        ");
+#endif
     }
 
     private void OnError(string response)
@@ -265,8 +275,9 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket OnError");
-        }");
+            window.ReactNativeWebView.postMessage('Game Socket OnError');
+          }
+        ");
         #endif
     }
 
@@ -277,8 +288,9 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket OnListenEvent");
-        }");
+            window.ReactNativeWebView.postMessage('Game Socket OnListenEvent');
+          }
+        ");
         #endif
     }
     private void OnSocketState(bool state)
@@ -299,8 +311,9 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket OnSocketError");
-        }");
+            window.ReactNativeWebView.postMessage('Game Socket OnSocketError');
+          }
+        ");
         #endif
     }
     private void OnSocketAlert(string data)
@@ -309,8 +322,9 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket Alert");
-        }");
+            window.ReactNativeWebView.postMessage('Game Socket Alert');
+          }
+        ");
         #endif
     }
 
@@ -321,8 +335,9 @@ public class SocketIOManager : MonoBehaviour
         #if UNITY_WEBGL && !UNITY_EDITOR
         Application.ExternalEval(@"
           if(window.ReactNativeWebView){
-            window.ReactNativeWebView.postMessage("Game Socket OnSocketOtherDevice");
-        }");
+            window.ReactNativeWebView.postMessage('Game Socket OnSocketOtherDevice');
+          }
+        ");
         #endif
     }
 
