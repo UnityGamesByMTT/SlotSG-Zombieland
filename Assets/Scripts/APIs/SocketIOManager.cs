@@ -70,13 +70,7 @@ public class SocketIOManager : MonoBehaviour
         isLoaded = false;
         Debug.Log("This is the new version of the game");
         #if UNITY_WEBGL && !UNITY_EDITOR
-        Application.ExternalEval(@"
-          (function(){
-            if(window.ReactNativeWebView){
-              window.ReactNativeWebView.postMessage('This is the new version of the game');      
-            }
-          })()
-        ");
+        SendAndroidMessage("This is the new version of the game 1.1");
         #endif
     }
 
@@ -404,6 +398,15 @@ public class SocketIOManager : MonoBehaviour
             Debug.LogWarning("Socket is not connected.");
         }
     }
+
+    #if UNITY_WEBGL && !UNITY_EDITOR
+    void SendAndroidMessage(string message){
+      Application.ExternalEval(@"
+        if(window.ReactNativeWebView){
+          window.ReactNativeWebView.postMessage(message);
+        }");
+    }
+    #endif
 
 
     private void InitRequest(string eventName)
