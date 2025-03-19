@@ -180,7 +180,7 @@ public class SocketIOManager : MonoBehaviour
             var combinedData = JSON.stringify({
                 socketURL: injectedObj.socketURL.trim(),
                 cookie: injectedObj.token.trim(),
-                nameSpace: event.data?.nameSpace ? event.data.nameSpace : ''
+                nameSpace: injectedObj.nameSpace.trim()
             });
 
             window.ReactNativeWebView.postMessage('authToken');
