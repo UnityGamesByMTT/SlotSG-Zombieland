@@ -1,38 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using System;
-using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
-using DG.Tweening;
-using System.Linq;
 using Newtonsoft.Json;
 using Best.SocketIO;
 using Best.SocketIO.Events;
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
-using System.Runtime.InteropServices;
 
 public class SocketIOManager : MonoBehaviour
 {
-
-
     [SerializeField]
     private SlotBehaviour slotManager;
-
-    [SerializeField]
-    private UIManager uiManager;
-
+    [SerializeField] private UIManager uiManager;
     internal GameData initialData = null;
     internal UIData initUIData = null;
     internal GameData resultData = null;
     internal PlayerData playerdata = null;
     internal Message myMessage = null;
     internal double GambleLimit = 0;
-
-    [SerializeField]
-    internal List<string> bonusdata = null;
+    [SerializeField] internal List<string> bonusdata = null;
     internal bool isResultdone = false;
 
     private SocketManager manager;
@@ -81,6 +68,16 @@ public class SocketIOManager : MonoBehaviour
     private void Awake()
     {
         isLoaded = false;
+        Debug.Log("This is the new version of the game");
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          (function(){
+            if(window.ReactNativeWebView){
+              window.ReactNativeWebView.postMessage('This is the new version of the game');      
+            }
+          })()
+        ");
+        #endif
     }
 
     //    private void OpenSocket()
@@ -294,7 +291,7 @@ public class SocketIOManager : MonoBehaviour
         // Create and setup SocketManager
         this.manager = new SocketManager(new Uri(SocketURI), options);
 #endif
-        Debug.Log(nameSpace);
+        Debug.Log("NameSpace used by the game : " + nameSpace);
         if (nameSpace == null || nameSpace == "")
         {
             gameSocket = this.manager.Socket;
