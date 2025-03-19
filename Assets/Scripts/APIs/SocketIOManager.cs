@@ -68,63 +68,14 @@ public class SocketIOManager : MonoBehaviour
     private void Awake()
     {
         isLoaded = false;
-        Debug.Log("This is the new version of the game");
+        Debug.Log("This is the new version of the game 1.2");
         #if UNITY_WEBGL && !UNITY_EDITOR
-        SendAndroidMessage("This is the new version of the game 1.1");
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("This is the new version of the game 1.2");
+        }");
         #endif
     }
-
-    //    private void OpenSocket()
-    //    {
-    //        // Create and setup SocketOptions
-    //        SocketOptions options = new SocketOptions();
-    //        options.AutoConnect = false;
-
-    //        Application.ExternalCall("window.parent.postMessage", "authToken", "*");
-
-    //#if UNITY_WEBGL && !UNITY_EDITOR
-    //        _jsManager.RetrieveAuthToken("token", authToken =>
-    //        {
-    //            if (!string.IsNullOrEmpty(authToken))
-    //            {
-    //                Debug.Log("Auth token is " + authToken);
-    //                Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
-    //                {
-    //                    return new
-    //                    {
-    //                        token = authToken
-    //                    };
-    //                };
-    //                options.Auth = authFunction;
-    //                // Proceed with connecting to the server
-    //                SetupSocketManager(options);
-    //            }
-    //            else
-    //            {
-    //                Application.ExternalEval(@"
-    //                window.addEventListener('message', function(event) {
-    //                    if (event.data.type === 'authToken') {
-    //                        // Send the message to Unity
-    //                        SendMessage('SocketManager', 'ReceiveAuthToken', event.data.cookie);
-    //                    }});");
-
-    //                // Start coroutine to wait for the auth token
-    //                StartCoroutine(WaitForAuthToken(options));
-    //            }
-    //        });
-    //#else
-    //        Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
-    //        {
-    //            return new
-    //            {
-    //                token = testToken
-    //            };
-    //        };
-    //        options.Auth = authFunction;
-    //        // Proceed with connecting to the server
-    //        SetupSocketManager(options);
-    //#endif
-    //    }
 
     private void OpenSocket()
     {
@@ -220,30 +171,6 @@ public class SocketIOManager : MonoBehaviour
 #endif
     }
 
-    //private IEnumerator WaitForAuthToken(SocketOptions options)
-    //{
-    //    // Wait until myAuth is not null
-    //    while (myAuth == null)
-    //    {
-    //        yield return null;
-    //    }
-
-    //    // Once myAuth is set, configure the authFunction
-    //    Func<SocketManager, Socket, object> authFunction = (manager, socket) =>
-    //    {
-    //        return new
-    //        {
-    //            token = myAuth
-    //        };
-    //    };
-    //    options.Auth = authFunction;
-
-    //    Debug.Log("Auth function configured with token: " + myAuth);
-
-    //    // Proceed with connecting to the server
-    //    SetupSocketManager(options);
-    //}
-
     private IEnumerator WaitForAuthToken(SocketOptions options)
     {
         // Wait until myAuth is not null
@@ -311,6 +238,12 @@ public class SocketIOManager : MonoBehaviour
     {
         Debug.Log("Connected!");
         SendPing();
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket OnConnected");
+        }");
+        #endif
     }
 
     private void OnDisconnected(string response)
@@ -318,17 +251,35 @@ public class SocketIOManager : MonoBehaviour
         Debug.Log("Disconnected from the server");
         StopAllCoroutines();
         uiManager.DisconnectionPopup();
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket OnDisconnected");
+        }");
+        #endif
     }
 
     private void OnError(string response)
     {
         Debug.LogError("Error: " + response);
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket OnError");
+        }");
+        #endif
     }
 
     private void OnListenEvent(string data)
     {
         Debug.Log("Received some_event with data: " + data);
         ParseResponse(data);
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket OnListenEvent");
+        }");
+        #endif
     }
     private void OnSocketState(bool state)
     {
@@ -345,16 +296,34 @@ public class SocketIOManager : MonoBehaviour
     private void OnSocketError(string data)
     {
         Debug.Log("Received error with data: " + data);
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket OnSocketError");
+        }");
+        #endif
     }
     private void OnSocketAlert(string data)
     {
         Debug.Log("Received alert with data: " + data);
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket Alert");
+        }");
+        #endif
     }
 
     private void OnSocketOtherDevice(string data)
     {
         Debug.Log("Received Device Error with data: " + data);
         uiManager.ADfunction();
+        #if UNITY_WEBGL && !UNITY_EDITOR
+        Application.ExternalEval(@"
+          if(window.ReactNativeWebView){
+            window.ReactNativeWebView.postMessage("Game Socket OnSocketOtherDevice");
+        }");
+        #endif
     }
 
     private void SendPing()
@@ -398,16 +367,6 @@ public class SocketIOManager : MonoBehaviour
             Debug.LogWarning("Socket is not connected.");
         }
     }
-
-    #if UNITY_WEBGL && !UNITY_EDITOR
-    void SendAndroidMessage(string message){
-      Application.ExternalEval(@"
-        if(window.ReactNativeWebView){
-          window.ReactNativeWebView.postMessage(message);
-        }");
-    }
-    #endif
-
 
     private void InitRequest(string eventName)
     {
