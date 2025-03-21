@@ -146,7 +146,7 @@ public class SlotBehaviour : MonoBehaviour
     private Coroutine FreeSpinRoutine = null;
     Coroutine tweenroutine;
     internal bool IsAutoSpin = false;
-    bool IsSpinning = false;
+    internal bool IsSpinning = false;
     bool SlotRunning = false;
     private bool IsFreeSpin = false;
     internal bool CheckPopups = false;
