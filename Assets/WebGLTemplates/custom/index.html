@@ -95,12 +95,13 @@
         productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
       };
 
-        
+        const unityInst
         var script = document.createElement("script");
         script.src = loaderUrl;
         script.onload = () => {
           createUnityInstance(canvas, config, (progress) => {
           }).then((unityInstance) => {
+            unityInst = unityInstance
           }).catch((message) => {
             alert(message);
           });

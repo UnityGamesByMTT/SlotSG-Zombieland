@@ -589,9 +589,9 @@ public class SocketIOManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(message);
         Debug.Log(json);
-        if (this.manager.Socket != null && this.manager.Socket.IsOpen)
+        if (gameSocket != null && gameSocket.IsOpen)
         {
-            this.manager.Socket.Emit("message", json);
+            gameSocket.Emit("message", json);
             Debug.Log("JSON data sent: " + json);
         }
         else
