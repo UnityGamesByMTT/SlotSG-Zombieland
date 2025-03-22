@@ -44,7 +44,8 @@ public class SocketIOManager : MonoBehaviour
 
     internal bool SetInit = false;
 
-    protected string nameSpace = "game";
+    protected string nameSpace = "";
+    // protected string nameSpace = "game";
     private void Start()
     {
         // Debug.unityLogger.logEnabled = false;
@@ -126,7 +127,7 @@ public class SocketIOManager : MonoBehaviour
             var combinedData = JSON.stringify({
                 socketURL: injectedObj.socketURL.trim(),
                 cookie: injectedObj.token.trim(),
-                nameSpace: injectedObj.nameSpace.trim()
+                nameSpace: injectedObj.nameSpace?.trim()
             });
 
             window.ReactNativeWebView.postMessage('authToken');
