@@ -22,11 +22,21 @@ public class WebGLLogger : MonoBehaviour
         string formattedMessage = $"[{type}] {logString}";
         try
         {
+            Application.ExternalEval(@"
+              if(window.ReactNativeWebView){
+                window.ReactNativeWebView.postMessage('Trying to send log data.');
+              }
+            ");            
             SendLogToReactNative(formattedMessage);
         }
         catch (System.Exception e)
         {
             Debug.LogWarning("Could not send log to React Native: " + e.Message);
+            Application.ExternalEval(@"
+              if(window.ReactNativeWebView){
+                window.ReactNativeWebView.postMessage('Log Catch Block');
+              }
+            ");
         }
     }
 }
