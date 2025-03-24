@@ -141,13 +141,13 @@ public class SocketIOManager : MonoBehaviour
         // Create and setup SocketManager
         this.manager = new SocketManager(new Uri(SocketURI), options);
 #endif
-        Debug.Log("NameSpace used by the game : " + nameSpace);
-        if (nameSpace == null || nameSpace == "")
-        {
-            gameSocket = this.manager.Socket;
+        if(string.IsNullOrEmpty(nameSpace) | string.IsNullOrWhiteSpace(nameSpace)){
+          gameSocket = this.manager.Socket;
         }
-        else
-            gameSocket = this.manager.GetSocket("/" + nameSpace);
+        else{
+          Debug.Log("Namespace used :"+nameSpace);
+          gameSocket = this.manager.GetSocket("/" + nameSpace);
+        }
         // Set subscriptions
         gameSocket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnConnected);
         gameSocket.On<string>(SocketIOEventTypes.Disconnect, OnDisconnected);
