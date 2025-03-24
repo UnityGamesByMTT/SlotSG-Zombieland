@@ -37,7 +37,8 @@ mergeInto(LibraryManager.library, {
           console.log('If message is authToken');
           window.addEventListener('message', function(event){
             console.log('message event triggered');
-            if(event.data.type == 'authToken'){
+            console.log(event);
+            if(event.data.type === 'authToken'){
               console.log('Inside events if authToken');
               var combinedData = JSON.stringify({
                   cookie: event.data.cookie,
