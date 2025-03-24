@@ -35,9 +35,10 @@ mergeInto(LibraryManager.library, {
         console.log('After Post message')
         if(message == "authToken"){
           console.log('If message is authToken');
-          window.parent.addEventListener('message', function(event){
+          window.addEventListener('message', function(event){
             console.log('message event triggered');
-            if(event.data.type == 'authToken'){
+            if(event.data.type === 'authToken'){
+              console.log('Inside events if authToken');
               var combinedData = JSON.stringify({
                   cookie: event.data.cookie,
                   socketURL: event.data.socketURL,
@@ -45,7 +46,11 @@ mergeInto(LibraryManager.library, {
               }); 
 
               if (typeof SendMessage === 'function') {
+                console.log('Sending unity a message');
                 SendMessage('SocketManager', 'ReceiveAuthToken', combinedData);
+              }
+              else{
+                console.log('SendMessage is not a func');
               }
             }
           });
