@@ -31,7 +31,7 @@ mergeInto(LibraryManager.library, {
       }
       else if(window.parent){
         console.log('Inside window.parent');
-        window.parent.postMessage(message);
+        window.postMessage(message);
         console.log('After Post message')
         if(message == "authToken"){
           console.log('If message is authToken');
