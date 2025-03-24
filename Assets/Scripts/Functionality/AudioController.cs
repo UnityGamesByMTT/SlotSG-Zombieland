@@ -48,13 +48,7 @@ public class AudioController : MonoBehaviour
     }
 
     void RecieveReactNativeAudioChanges(bool focus){
-      #if UNITY_WEBGL && !UNITY_EDITOR
-      Application.ExternalEval(@"
-        if(window.ReactNativeWebView){
-          window.ReactNativeWebView.postMessage('Called ReactNative Audio Changes Method.');
-        }
-      ");
-      #endif
+      Debug.Log("React-Native Audio Changes Called");
       
       if(focus){
         if (!bg_adudio.mute) bg_adudio.UnPause();
