@@ -55,7 +55,7 @@ mergeInto(LibraryManager.library, {
             }
           });
         }
-        window.postMessage(message);
+        window.parent.postMessage(message, "*");
       }
     }
 });
