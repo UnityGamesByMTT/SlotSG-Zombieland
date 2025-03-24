@@ -1,7 +1,7 @@
 mergeInto(LibraryManager.library, {
     SendLogToReactNative: function (messagePtr) {
         var message = UTF8ToString(messagePtr);
-        console.log('jslib fun : ' + message);
+        // console.log('jslib fun : ' + message);
         if (window.ReactNativeWebView) {
           window.ReactNativeWebView.postMessage(message);
         } 
@@ -30,9 +30,13 @@ mergeInto(LibraryManager.library, {
         window.ReactNativeWebView.postMessage(message);
       }
       else if(window.parent){
+        console.log('Inside window.parent');
         window.parent.postMessage(message);
+        console.log('After Post message')
         if(message == "authToken"){
-          window.addEventListener('message', function(event){
+          console.log('If message is authToken');
+          window.parent.addEventListener('message', function(event){
+            console.log('message event triggered');
             if(event.data.type == 'authToken'){
               var combinedData = JSON.stringify({
                   cookie: event.data.cookie,
