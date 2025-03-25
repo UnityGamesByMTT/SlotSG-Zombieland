@@ -9,9 +9,10 @@ mergeInto(LibraryManager.library, {
 
     SendPostMessage: function(messagePtr) {
       var message = UTF8ToString(messagePtr);
-      console.log('SendReactPostMessage, message sent: ' + message);
+      // console.log('SendReactPostMessage, message sent: ' + message);
       if(window.ReactNativeWebView){
         if(message == "authToken"){
+          window.ReactNativeWebView.postMessage("if message is authtoken");
           var injectedObjectJson = window.ReactNativeWebView.injectedObjectJson();
           var injectedObj = JSON.parse(injectedObjectJson);
 

@@ -361,13 +361,15 @@ public class SocketIOManager : MonoBehaviour
                 }
             case "ExitUser":
                 {
+                    
+                    gameSocket.Disconnect();
                     if (this.manager != null)
                     {
                         Debug.Log("Dispose my Socket");
                         this.manager.Close();
                     }
 #if UNITY_WEBGL && !UNITY_EDITOR
-                        JSManager.SendCustomMessage("onExit");
+                    JSManager.SendCustomMessage("onExit");
 #endif
                     break;
                 }
@@ -382,17 +384,6 @@ public class SocketIOManager : MonoBehaviour
     {
         slotManager.shuffleInitialMatrix();
 
-        //for (int i = 0; i < slotPop.Count; i++)
-        //{
-        //    List<int> points = slotPop[i]?.Split(',')?.Select(Int32.Parse)?.ToList();
-        //    slotManager.PopulateInitalSlots(i, points);
-        //}
-
-        // for (int i = 0; i < slotPop.Count; i++)
-        // {
-        //     slotManager.LayoutReset(i);
-        // }
-
         for (int i = 0; i < LineIds.Count; i++)
         {
             slotManager.FetchLines(LineIds[i], i);
@@ -401,14 +392,7 @@ public class SocketIOManager : MonoBehaviour
         slotManager.SetInitialUI();
 
         isLoaded = true;
-//         Application.ExternalCall("window.parent.postMessage", "OnEnter", "*");
-// #if UNITY_WEBGL && !UNITY_EDITOR
-//     Application.ExternalEval(@"
-//       if(window.ReactNativeWebView){
-//         window.ReactNativeWebView.postMessage('OnEnter');
-//       }
-//     ");
-// #endif
+
 #if UNITY_WEBGL && !UNITY_EDITOR
         JSManager.SendCustomMessage("OnEnter");
 #endif
