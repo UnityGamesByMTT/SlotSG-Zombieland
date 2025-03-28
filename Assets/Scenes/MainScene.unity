@@ -7628,7 +7628,7 @@ MonoBehaviour:
   uiManager: {fileID: 377874625}
   bonusdata: []
   JSManager: {fileID: 1989661610}
-  testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3NzkxOTI3OTgxYmU0MzlkMjkyYjg4OSIsInVzZXJuYW1lIjoiTWVodWwiLCJyb2xlIjoicGxheWVyIiwiaWF0IjoxNzQyMzU5MzcwLCJleHAiOjE3NDI0NDU3NzB9.Rkx0C3aPd6xtum0X6NaUsoPyPHYxyvNIZCLS9o1bMwU
+  testToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3N2JhM2QzOTgxYmU0MzlkMjkyYzgzYSIsInVzZXJuYW1lIjoiTWVldCIsInJvbGUiOiJwbGF5ZXIiLCJpYXQiOjE3NDMxNTY2NDIsImV4cCI6MTc0Mzc2MTQ0Mn0.FGd4TqNDQRoeZz7xe0x-4CBUSb-6fXIAapm9cKBMhT4
 --- !u!1 &509127710
 GameObject:
   m_ObjectHideFlags: 0
