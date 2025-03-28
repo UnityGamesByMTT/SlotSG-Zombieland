@@ -13,6 +13,7 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip[] Bonusclips;
     [SerializeField] private AudioSource bg_audioBonus;
     [SerializeField] private AudioSource audioPlayer_Bonus;
+    [SerializeField] private SlotBehaviour slotBehaviour;
 
 
     private void Start()
@@ -44,6 +45,27 @@ public class AudioController : MonoBehaviour
             if (!audioPlayer_button.mute) audioPlayer_button.UnPause();
 
         }
+    }
+
+    void RecieveReactNativeAudioChanges(bool focus){
+      Debug.Log("React-Native Audio Changes Called");
+      
+      if(focus){
+        if (!bg_adudio.mute) bg_adudio.UnPause();
+        if (slotBehaviour.IsSpinning)
+        {
+            if (!audioPlayer_wl.mute) audioPlayer_wl.UnPause();
+        }
+        else
+        {
+            StopWLAaudio();
+        }
+        if (!audioPlayer_button.mute) audioPlayer_button.UnPause();
+      }else{
+        bg_adudio.Pause();
+        audioPlayer_wl.Pause();
+        audioPlayer_button.Pause();
+      }
     }
 
     internal void SwitchBGSound(bool isbonus)
@@ -178,6 +200,7 @@ public class AudioController : MonoBehaviour
                 audioPlayer_wl.volume = vol;
                 audioPlayer_Bonus.mute = (vol == 0);
                 audioPlayer_Bonus.volume = vol;
+                audioSpin_button.volume = vol;
                 break;
             case "all":
 

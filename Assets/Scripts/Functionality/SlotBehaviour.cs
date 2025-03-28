@@ -146,7 +146,7 @@ public class SlotBehaviour : MonoBehaviour
     private Coroutine FreeSpinRoutine = null;
     Coroutine tweenroutine;
     internal bool IsAutoSpin = false;
-    bool IsSpinning = false;
+    internal bool IsSpinning = false;
     bool SlotRunning = false;
     private bool IsFreeSpin = false;
     internal bool CheckPopups = false;
@@ -319,7 +319,7 @@ public class SlotBehaviour : MonoBehaviour
         if (LineBet_text) LineBet_text.text = SocketManager.initialData.Bets[BetCounter].ToString();
         if (TotalBet_text) TotalBet_text.text = (SocketManager.initialData.Bets[BetCounter] * Lines).ToString();
         currentTotalBet = SocketManager.initialData.Bets[BetCounter] * Lines;
-        CompareBalance();
+       // CompareBalance();
     }
 
     private void TriggerPlusMinusButtons(int m_cmd)
@@ -410,7 +410,7 @@ public class SlotBehaviour : MonoBehaviour
         if (!IsSpinning)
         {
             IsHoldSpin = false;
-            Invoke("AutoSpinHold", 2f);
+            Invoke("AutoSpinHold", 1.5f);
         }
 
     }
